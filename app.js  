@@ -1,0 +1,124 @@
+/**
+ * Lógica del Generador de Cartas
+ * Maneja la aleatoriedad, el redimensionamiento dinámico y el temporizador.
+ */
+
+// 1. Definición de constantes globales
+const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+const suits = [
+    { name: "heart", symbol: "♥", color: "#ef4444" }, // Rojo vivo
+    { name: "diamond", symbol: "♦", color: "#ef4444" },
+    { name: "spade", symbol: "♠", color: "#1e293b" }, // Azul muy oscuro/negro
+    { name: "club", symbol: "♣", color: "#1e293b" }
+];
+
+let timeLeft = 10;
+let isAutoRefreshEnabled = true;
+
+// 2. Inicialización al cargar la ventana
+window.onload = function() {
+    generateCard();
+    startTimerLoop();
+    updateSize(); 
+
+    // Configuración de eventos (Event Listeners)
+    document.getElementById("draw-button").addEventListener("click", () => {
+        generateCard();
+        timeLeft = 10; // Reiniciar cuenta si el usuario pide una carta manual
+    });
+
+    document.getElementById("input-width").addEventListener("input", updateSize);
+    document.getElementById("input-height").addEventListener("input", updateSize);
+
+    // Control del interruptor de auto-refresco
+    document.getElementById("auto-refresh-toggle").addEventListener("change", (e) => {
+        isAutoRefreshEnabled = e.target.checked;
+        const timerLabel = document.getElementById("timer-text");
+        
+        if (!isAutoRefreshEnabled) {
+            timerLabel.innerText = "Pausado";
+            timerLabel.classList.add("text-slate-600");
+        } else {
+            timeLeft = 10;
+            timerLabel.innerText = timeLeft + "s";
+            timerLabel.classList.remove("text-slate-600");
+        }
+    });
+};
+
+/**
+ * Genera un valor y palo aleatorio y actualiza el DOM
+ */
+function generateCard() {
+    const randomValue = values[Math.floor(Math.random() * values.length)];
+    const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+
+    const cardNumber = document.getElementById("card-number");
+    const topSuit = document.getElementById("top-suit");
+    const bottomSuit = document.getElementById("bottom-suit");
+    const card = document.getElementById("card");
+
+    // Inyectar contenido
+    cardNumber.innerText = randomValue;
+    topSuit.innerText = randomSuit.symbol;
+    bottomSuit.innerText = randomSuit.symbol;
+    
+    // Aplicar color según el palo
+    card.style.color = randomSuit.color;
+    
+    // Animación de entrada suave (Reparto)
+    card.animate([
+        { transform: 'translateX(-100px) rotate(-5deg) scale(0.9)', opacity: 0 },
+        { transform: 'translateX(0) rotate(0) scale(1)', opacity: 1 }
+    ], { duration: 450, easing: 'ease-out' });
+}
+
+/**
+ * Ajusta el tamaño de la carta y la escala relativa del mazo
+ */
+function updateSize() {
+    const width = parseInt(document.getElementById("input-width").value);
+    const height = parseInt(document.getElementById("input-height").value);
+    const card = document.getElementById("card");
+    const deck = document.getElementById("deck-container");
+
+    // Actualizar labels de UI
+    document.getElementById("val-width").innerText = width + "px";
+    document.getElementById("val-height").innerText = height + "px";
+
+    // Cambiar dimensiones de la carta principal
+    card.style.width = width + "px";
+    card.style.height = height + "px";
+
+    // --- Lógica de Relatividad del Mazo ---
+    const baseWidth = 300;
+    // El mazo se reduce si la carta crece
+    const scaleFactor = Math.max(0.4, baseWidth / width); 
+    // El mazo se aleja si la carta se ensancha
+    const dynamicMargin = (width / 5) + 20;
+
+    deck.style.transform = `scale(${scaleFactor})`;
+    deck.style.marginRight = `${dynamicMargin}px`;
+
+    // Ajuste proporcional de tipografía
+    const fontScale = Math.min(width / 3, height / 4.5);
+    document.getElementById("card-number").style.fontSize = (fontScale * 1.2) + "px";
+    document.getElementById("top-suit").style.fontSize = (fontScale * 0.5) + "px";
+    document.getElementById("bottom-suit").style.fontSize = (fontScale * 0.5) + "px";
+}
+
+/**
+ * Bucle de tiempo para el refresco automático
+ */
+function startTimerLoop() {
+    setInterval(() => {
+        if (isAutoRefreshEnabled) {
+            timeLeft--;
+            document.getElementById("timer-text").innerText = timeLeft + "s";
+            if (timeLeft <= 0) {
+                generateCard();
+                timeLeft = 10;
+            }
+        }
+    }, 1000);
+}

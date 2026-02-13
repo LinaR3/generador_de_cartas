@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Cartas Aleatorias</title>
+    <!-- Tailwind CSS desde CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vinculación del archivo CSS personalizado -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 min-h-screen flex flex-col items-center justify-center p-4 text-white overflow-x-hidden">
+
+    <!-- Contenedor de la Escena Principal -->
+    <div class="flex flex-col md:flex-row items-center justify-center mb-12 relative w-full max-w-6xl">
+        
+        <!-- Sección del Mazo Dinámico -->
+        <div class="relative hidden md:block" id="deck-container" style="width: 200px; height: 300px; margin-right: 4rem;">
+            <div class="deck-card w-full h-full z-10 translate-x-3 translate-y-3 opacity-40 shadow-sm"></div>
+            <div class="deck-card w-full h-full z-20 translate-x-2 translate-y-2 opacity-60 shadow-md"></div>
+            <div class="deck-card w-full h-full z-30 translate-x-1 translate-y-1 opacity-80 shadow-lg"></div>
+            
+            <div class="deck-card w-full h-full z-40 p-2 shadow-2xl border-2 border-white bg-slate-100">
+                <div class="card-back-pattern w-full h-full rounded-lg border-4 border-white flex items-center justify-center shadow-inner">
+                    <div class="bg-white/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-sm">
+                        <span class="text-4xl text-white">♠</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carta Activa (Generada por JS) -->
+        <div id="card" class="relative bg-white rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] flex items-center justify-center transition-all duration-500 ease-out overflow-hidden shrink-0" style="width: 300px; height: 450px;">
+            <div id="top-suit" class="absolute top-4 left-6 text-6xl select-none"></div>
+            <div id="card-number" class="card-font text-9xl font-bold select-none leading-none"></div>
+            <div id="bottom-suit" class="absolute bottom-4 right-6 text-6xl rotate-180 select-none"></div>
+        </div>
+    </div>
+
+    <!-- Panel de Controles -->
+    <div class="bg-slate-900/80 backdrop-blur-md p-6 rounded-3xl border border-slate-800 shadow-2xl flex flex-col gap-6 w-full max-w-md">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-widest font-black text-slate-500 ml-1">Ancho</label>
+                <input type="range" id="input-width" min="150" max="500" value="300" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                <div class="flex justify-between text-[10px] text-slate-600 font-mono">
+                    <span id="val-width">300px</span>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] uppercase tracking-widest font-black text-slate-500 ml-1">Alto</label>
+                <input type="range" id="input-height" min="250" max="700" value="450" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                <div class="flex justify-between text-[10px] text-slate-600 font-mono">
+                    <span id="val-height">450px</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <button id="draw-button" class="group relative w-full py-4 bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 active:scale-95 transition-all rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl overflow-hidden">
+                <span class="relative z-10">Generar Nueva Carta</span>
+            </button>
+            
+            <div class="flex items-center justify-between px-2 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Auto-refresco</span>
+                    <p class="text-slate-300 text-xs font-mono" id="timer-text">10s</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="auto-refresh-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vinculación del archivo JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
