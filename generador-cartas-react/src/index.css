@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.card-font {
+    font-family: 'Crimson Pro', serif;
+}
+
+.deck-card {
+    position: absolute;
+    border-radius: 0.75rem;
+    transition: all 0.5s ease-out;
+}
+
+/* Diseño del reverso AZUL */
+.card-back-pattern-blue {
+    background-color: #1d4ed8;
+    background-image: radial-gradient(#3b82f6 1px, transparent 0);
+    background-size: 10px 10px;
+}
+
+/* Diseño del reverso ROJO */
+.card-back-pattern-red {
+    background-color: #dc2626;
+    background-image: radial-gradient(#ef4444 1px, transparent 0);
+    background-size: 10px 10px;
+}
+
+/* Suavizado para el movimiento del mazo */
+#deck-container {
+    transition: transform 0.4s ease-out, margin-right 0.4s ease-out;
+    transform-origin: right center;
+}
+
+/* --- Estilos del Toggle Switch (Interruptor) --- */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    background-color: #334155;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #22c55e;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+
+.poker-table-bg {
+    background: 
+        /* Reflejos de luces de casino */
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.1) 0%, transparent 35%),
+        /* Sombras de objetos imaginarios */
+        radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.2) 0%, transparent 50%),
+        /* Textura de fibra */
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0,0,0,0.05) 2px,
+            rgba(0,0,0,0.05) 4px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            rgba(0,0,0,0.05) 2px,
+            rgba(0,0,0,0.05) 4px
+        ),
+        /* Base verde profundo */
+        linear-gradient(135deg, #0a3520 0%, #1a7f4d 40%, #0d4028 70%, #0a2e1a 100%);
+}
